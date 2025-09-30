@@ -1,5 +1,6 @@
-# Variapveis da partida
+# Variáveis da partida
 quantidadePartidas, numPartida = 0, 0
+flagResistencia, flagNotVirada = False, False
 vitoriasArthur, vitoriasJoao, resistenciaArthur, resistenciaJoao = 0, 0, 0, 0
 # ---------------------
 # Outputs iniciais
@@ -14,22 +15,29 @@ print(f"Eles batalharão em {quantidadePartidas} longas partidas.")
 # ------------------------------------------
 # Entrada de dados
 forcaArthur, forcaJoao, resistencia = int(input()), int(input()), int(input())
-# Condições de Rodada e de Partidas
-resistenciaArthur, resistenciaJoao = resistencia, resistencia
-#runPartida, runRodada   =   True, True
-pararFlag   = False
+
 for partida in range(quantidadePartidas):
-    if (not pararFlag):
-        # Variáveis de controle
+    if (not flagNotVirada):
+        if (flagResistencia): flagResistencia = False
+        # Contador de partidas
         numPartida          += 1
+        # Reset das variáveis de Resistência
+        resistenciaArthur = resistenciaJoao = resistencia
         # Outputs de início de partida
         print(f"Começa a {numPartida}ª partida!\n"
             f"Placar geral: {vitoriasArthur} X {vitoriasJoao}")
         # ----------------------------
-        #runRodada   = True
-        while (not pararFlag):
+        while (not flagResistencia):
             # Definindo vencedor
             numero  = int(input()) # Número que determina vencedor da rodada
+            # Verifica se é quadrado
+            isQuadratic = True
+            if (numero > 1):
+                i = 0
+                while (i * i != numero):
+                    i += 1
+            else: isQuadratic   = False
+            # ---------------------
             # Verifica se é primo
             isPrime =   True
             if (numero > 1):
@@ -41,7 +49,7 @@ for partida in range(quantidadePartidas):
             else:
                 isPrime = False
             # --------------
-            if (numero % (numero ** 0.5) == 0 if (numero > 0) else 0):
+            if (isQuadratic):
                 resistenciaArthur   += 1
                 resistenciaJoao     -= 1
                 print(f"O número é um quadrado perfeito! Arthur consegue puxar mais forte.")
@@ -65,22 +73,16 @@ for partida in range(quantidadePartidas):
             if (resistenciaJoao == 0):
                 vitoriasArthur += 1
                 print(f"Arthur dá orgulho para Maceió e ganha a partida!")
-                pararFlag   = True
-                # runRodada, runPartida   = False, False
+                flagResistencia = True
             elif (resistenciaArthur == 0):
                 vitoriasJoao        += 1
                 print(f"João usa seus talentos de mangueboy e leva essa para casa!")
-                pararFlag   = True
-                #runRodada, runPartida   = False, False
+                flagResistencia = True             
             # -----------------------
-            if ((vitoriasJoao == ((quantidadePartidas//2) + 1) and vitoriasArthur == 0) or 
-                (vitoriasJoao == 0  and vitoriasArthur == ((quantidadePartidas//2) + 1)) and 
-                quantidadePartidas > 1):
-                pararFlag   = True
-                #runPartida  = False
-    if (resistenciaArthur == 0 or resistenciaJoao == 0):
-        resistenciaArthur, resistenciaJoao, pararFlag = resistencia, resistencia, False
-        
+            if ((vitoriasJoao == ((quantidadePartidas//2) + 1) and vitoriasArthur <= (quantidadePartidas//2)) or 
+                (vitoriasJoao <= (quantidadePartidas//2) and vitoriasArthur == ((quantidadePartidas//2) + 1))):
+                flagNotVirada  = True
+
 # Output fim de todas as partidas
 print(f"\nAgora eles estão prontos para o mundial!\n"
     f"Placar final: {vitoriasArthur} X {vitoriasJoao}")
