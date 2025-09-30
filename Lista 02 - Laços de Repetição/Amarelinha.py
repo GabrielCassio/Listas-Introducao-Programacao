@@ -1,10 +1,8 @@
-# Ordem da Amarelinha 1 -> 2 -> 3 -> 4 -> 5 |  Ana, Adrieli, Joab e Duda | podem errar ao tentar pular para a próxima casa (perder o equilíbrio ou pisar fora da linha)
-# Variáveis da brincadeira
+## Variáveis da brincadeira
 n   = int(input()) # Número de tentativas registrado por jogador
 n1, n2, n3, n4 = 0, 0, 0, 0 # Última casa alcançada na última tentiva
 nomesVencedores, numVencedores  = "", 0
 # -----------------------
-
 # Verifica a rodada de cada criança
 for crianca in range(4):
     # Tentativas
@@ -16,7 +14,7 @@ for crianca in range(4):
         elif (tentativas + 1 == n and crianca == 2): n3 = numCasas
         elif (tentativas + 1 == n and crianca == 3): n4 = numCasas 
         # -------------------------------------------------------------
-
+    # Mostra o resultado de cada criança
     if (crianca == 0): 
         print(f"Ana tentou {n} vezes e completou a última casa {n1}")
         if (n1 == 5): 
@@ -45,21 +43,44 @@ for crianca in range(4):
             numVencedores   += 1
             print(f"Duda completou a amarelinha!")
         else: print(f"Duda não conseguiu completar a amarelinha!")
-
+    # -----------------------------
+# Verifica o vencedor
 if (numVencedores == 1):
     print(f"O vencedor é {nomesVencedores}!")
 elif (numVencedores >= 2):
-    
-    if ("Ana" in nomesVencedores): 
-    if ("Adrieli" in nomesVencedores): 
-    if ("Joab" in nomesVencedores): 
-    if ("Duda" in nomesVencedores):
-
+    # Define os vencedores
+    vencedor1, vencedor2, vencedor3, vencedor4 = "", "", "", ""
+    # Define a ordem dos vencedores
+    # Ana
+    if ("Ana" in nomesVencedores): vencedor1 = "Ana"
+    # Adrieli
+    if ("Adrieli" in nomesVencedores and
+        not "Ana" in nomesVencedores): vencedor1 = "Adrieli"
+    else: vencedor2 = "Adrieli"
+    # Joab
+    if ("Joab" in nomesVencedores and
+        not "Ana" in nomesVencedores and
+        not "Adrieli" in nomesVencedores): vencedor1 = "Joab"
+    elif ("Joab" in nomesVencedores and
+        not "Ana" in nomesVencedores): vencedor2 = "Joab"
+    else: vencedor3 = "Joab"
+    # Duda
+    if ("Duda" in nomesVencedores and 
+        not "Ana" in nomesVencedores and
+        not "Adrieli" in nomesVencedores and 
+        not "Joab" in nomesVencedores): vencedor1 = "Duda"
+    elif ("Duda" in nomesVencedores and 
+        not "Ana" in nomesVencedores and
+        not "Adrieli" in nomesVencedores): vencedor2 = "Duda" 
+    elif ("Duda" in nomesVencedores and
+        not "Ana" in nomesVencedores): vencedor3 = "Duda"
+    else: vencedor4 = "Duda"
+    # ------------------------------
+    # Mostra os vencedores
     if (numVencedores == 2):
-        vencedor1, vencedor2    = "", ""
-        print(f"")
+        print(f"Houve empate entre: {vencedor1}, {vencedor2}")
     elif (numVencedores == 3):
-        print(f"")
+        print(f"Houve empate entre: {vencedor1}, {vencedor2}, {vencedor3}")
     elif (numVencedores == 4):
-        print(f"")
-    
+        print(f"Houve empate entre: {vencedor1}, {vencedor2}, {vencedor3}, {vencedor4}")
+    # -------------------
