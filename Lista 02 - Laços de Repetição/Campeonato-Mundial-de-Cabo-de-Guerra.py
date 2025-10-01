@@ -31,12 +31,7 @@ for partida in range(quantidadePartidas):
             # Definindo vencedor
             numero  = int(input()) # Número que determina vencedor da rodada
             # Verifica se é quadrado
-            isQuadratic = True
-            if (numero > 1):
-                i = 0
-                while (i * i != numero):
-                    i += 1
-            else: isQuadratic   = False
+            isQuadratic = numero >= 0 and int(numero ** 0.5) ** 2 == numero
             # ---------------------
             # Verifica se é primo
             isPrime =   True
