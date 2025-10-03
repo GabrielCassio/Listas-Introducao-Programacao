@@ -1,59 +1,56 @@
-# Variáveis do Advinho
 # Número de Vidas | Tentativa de Letra
-numLifeSoothsayer, letterAttempt   = 6, ""
-# Variáveis do Desafiante
+numLifeSoothsayer = 6
+
 # Palavra Secreta | Palavra fantasma
-secretWord, ghostWord   = "", ""
+secretWord, ghostWord = "", ""
 
 # Número Rodadas | Rodada Atual
-numRounds, currentRound   = int(input()), 0
-# Condições de Parada
-
+numRounds, currentRound = int(input()), 0
 
 # Output inicial do jogo
 print(f"Que comece o jogo! Adivinhe a palavra, mas cuidado para não cair na armadilha.")
 
-
-
-
-
-
-while ((currentRound < numRounds) and (numLifeSoothsayer > 0)):
-    numLifeSoothsayer  = 6
-    # Início da rodada 
-    currentRound += 1
+while ((currentRound < numRounds)):
+    # Início da rodada -----------------------
+    # Reset da Vida
+    numLifeSoothsayer   = 6
+    # Incrementa a ordinalidade da rodada atual
+    currentRound        += 1
+    # Imprime a relação da rodada atual
     print(f"Rodada {currentRound}/{numRounds}:")
 
-    # Parte do Desafiante --------------------
-    secretWord, ghostWord, numLettersComun, newGhostWord, wordsInRules, repeatedLetters  = input().lower(), input().lower(), 0, False, False, ""
+    # Reset Palavra Secreta | Reset Palavra Fantasma |  Quantidade de Letras Comuns | Letras Repitidas
+    secretWord, ghostWord, numLettersComun, repeatedLetters = input().lower(), input().lower(), 0, ""
+    # Tamanho da Palavra Secreta | Tamanho da Palavra Fantasma 
     lengthSecretWord, lengthGhostWord = len(secretWord), len(ghostWord)
-    
 
+    # A nova palavra fantasma está dentro das regras
+    wordsInRules    = False
     while (not wordsInRules):
         # Iníco da parte dos Desafiantes
         for ghostLetter in ghostWord:
             if ((ghostLetter in secretWord) and (not ghostLetter in repeatedLetters)):
                 numLettersComun += 1
                 repeatedLetters += ghostLetter
-        if (numLettersComun >= 3 or ghostWord == secretWord):
+        if (numLettersComun >= 3):
             print(f"A palavra fantasma possui {numLettersComun} letras presentes na palavra secreta. Tente uma com menos de 3 letras iguais.")
             ghostWord, numLettersComun, repeatedLetters    = input().lower(), 0, ""
         else: wordsInRules, numLettersComun = True, 0
-        # Fim da parte do Desafiante ------------
 
     # Formatação de Outputs
     outWord, outAttempts = "", ""
-    for caractere in range(lengthSecretWord): 
+    for index in range(lengthSecretWord): 
         outWord += "_"
-        if (not caractere + 1 == lengthSecretWord): outWord += " "
+        if (not (index + 1) == lengthSecretWord): outWord += " "
+    # Imprime o tamanho ad Palavra em formato de forca
     print(f"Palavra: {outWord}")
 
-
-    # Parte do Adivinho ---------------------
+    # Letras Usadas | Número de tentativas | Condição de Acertou Todas
     lettersInRound, numAttempts, hitedAll  = "", 0, False
 
     while ((numLifeSoothsayer > 0) and not hitedAll):
-        letterAttempt, posSecretLetter, newWord   = input().lower(), 0, ""
+        # Letra Utilizada
+        letterAttempt = input().lower()
 
         # Verifica se a Letra é repetida
         if (letterAttempt in lettersInRound):
@@ -61,43 +58,46 @@ while ((currentRound < numRounds) and (numLifeSoothsayer > 0)):
             print(f"Você já tentou a letra '{letterAttempt}'. Tente outra.")
         # Fim da verificação -----------------------
         else:
+             # Caso não seja repetida -----------
             numAttempts     += 1
             lettersInRound  += letterAttempt
-            hitedLetter     = False
-            # Caso não seja repetida -----------
+
             if (letterAttempt in secretWord):
-                # Adiciona a letra à saída
-                for letra in secretWord:
-                    posSecretLetter += 1
-                    if (letterAttempt == letra):
-                        indexSubstituir = 0
-                        for caractere in outWord:
-                            indexSubstituir += 1
-                            if ((2 * posSecretLetter - 1)   == indexSubstituir):
-                                newWord += f"{letterAttempt}"
-                            else:
-                                newWord += f"{caractere}"
-                        outWord, newWord = newWord, ""
-                # ------------------------------------
-                print(f"Boa! A letra '{letterAttempt}' está na palavra.")
-                # Verifica se acertou todas
-                if (not "_" in outWord):
-                    hitedAll = True
-                    secretWord = secretWord.capitalize()
-                    print(f"Parabéns, Adivinho! Você descobriu a palavra secreta: {secretWord}.\n"
-                            f"Total de tentativas: {numAttempts}")
-                # ------------------------------------
-            
+                # Posição de cada Letra na Palavra Secreta | Nova Palavra de saída
+                posSecretLetter, newWord = 0, ""
+                if (letterAttempt in secretWord):
+                    for letra in secretWord: # Adiciona a letra à saída
+                        posSecretLetter += 1
+                        if (letterAttempt == letra):
+                            indexSubstituir = 0
+                            for caractere in outWord:
+                                indexSubstituir += 1
+                                if ((2 * posSecretLetter - 1) == indexSubstituir): newWord += f"{letterAttempt}"
+                                else: newWord += f"{caractere}"
+                            # Armazenando Nova palavra na saída global | resetando variável newWord
+                            outWord, newWord = newWord, ""
+
+                    # Imprime a saída de acerto para nova palavra
+                    print(f"Boa! A letra '{letterAttempt}' está na palavra.")
+
+                    # Verifica se acertou todas
+                    if (not "_" in outWord):
+                        # Ativa flag de acertou de todas
+                        hitedAll = True
+                        secretWord = secretWord.capitalize()
+                        print(f"Parabéns, Adivinho! Você descobriu a palavra secreta: {secretWord}.\n"
+                                f"Total de tentativas: {numAttempts}")
+
             elif ((not letterAttempt in secretWord) and (not letterAttempt in ghostWord)):
                 numLifeSoothsayer   -= 1
                 print(f"Naao! A letra '{letterAttempt}' não está na palavra. Você perdeu 1 vida.")
-                if (numLifeSoothsayer == 0):
+                if (numLifeSoothsayer <= 0):
                     secretWord = secretWord.capitalize()
                     print(f"Fim de jogo! A forca está completa e o Adivinho perdeu. A palavra secreta era: {secretWord}.")
             elif ((not letterAttempt in secretWord) and (letterAttempt in ghostWord)):
                 numLifeSoothsayer   -= 2
                 print(f"CUIDADO! A letra '{letterAttempt}' é uma armadilha! Você perdeu 2 vidas.")
-                if (numLifeSoothsayer == 0):
+                if (numLifeSoothsayer <= 0):
                     secretWord = secretWord.capitalize()
                     print(f"Fim de jogo! A forca está completa e o Adivinho perdeu. A palavra secreta era: {secretWord}.")
             # ------------------------------
@@ -115,4 +115,3 @@ while ((currentRound < numRounds) and (numLifeSoothsayer > 0)):
                         f"Vidas restantes: {numLifeSoothsayer}\n"
                         f"Letras chutadas: {outAttempts}\n"
                         f"=====================")
-    # Fim da parte do Adivinho --------------
