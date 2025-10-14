@@ -1,4 +1,4 @@
-# Vetor base para o ordenamento decrescente
+'''# Vetor base para o ordenamento decrescente
 import random
 vet2D = [
          [5, 6, 4, 7, 5, 1, 7, 2, 6],
@@ -28,3 +28,6 @@ while (currentWord < lenVectWord):
     currentWord += 1
 
 print(vet2D)
+'''
+a = ['a', 'b', "c"]
+print(min(a[1:]))
