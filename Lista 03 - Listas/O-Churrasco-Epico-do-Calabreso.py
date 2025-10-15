@@ -1,5 +1,5 @@
-numConvidados, nameConvidados, vet2Comidas  = int(input()), [], [ [], # Valor das Comidas
-                                                                  []  # Nome das Comidas
+numConvidados, nameConvidados, vet2Comidas  = int(input()), [], [   [], # Valor das Comidas
+                                                                    []  # Nome das Comidas
                                                                 ]
 for convidado in range(numConvidados):
     name = input()
