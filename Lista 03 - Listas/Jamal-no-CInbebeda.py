@@ -4,7 +4,7 @@ print(f"Finalmente Jamal chega no CInbebeda, pronto pra causar, quando de repent
 
 nmMonitors = ["Júnior", "Henrique", "Miguel", "Guilherme"]
 entry = input().split(", ")
-nomes, notas = entry[0:-1:2], [int(i) for i in entry[1:8:2]]
+nomes, notas = entry[0:8:2], [int(i) for i in entry[1:8:2]]
 #print(notas)
 
 # Verifica se todos os monitores desejados
@@ -16,40 +16,42 @@ while ((not "Júnior" in nomes) or (not "Henrique" in nomes) or  (not "Miguel" i
 
 #print(f"Todos os nomes são de monitores 👍")
 # --------------------------------------
-allPassed = True if (notas == [10, 10, 10, 10]) else False
+
 nmPior = nomes[notas.index(min(notas))]
 
 for j in range(4):
     if (notas[j] == 10): print(f"O monitor {nomes[j]} é diferenciado! Teve a aprovação do próprio Jamal.")
-if (not allPassed):
-    # Retorna o Nome do Monitor com menor Nota
-    print(f"Jamal avaliou a situação dos monitores e viu que {nmPior} é o mais necessitado.")
+
+# Retorna o Nome do Monitor com menor Nota
+print(f"Jamal avaliou a situação dos monitores e viu que {nmPior} é o mais necessitado.")
 # ------------------------------------
 
 # Validação do movimento dos pés
 movPes = input().split(", ")
-newAttempt, qErrors= False, 0
 
-# Verificação dos Movimentos (E ou D) | Tem 7 movimentos
-if (len(movPes) != 7):
-    qErrors += 1
-    newAttempt = True
-    print("Quatidade de movimentos diferente de 7!")
-# Percorre toda a lista de movimentos e verifica se existe apenas (E ou D) e (1 < m ou n < 4)
-#print(f"{movPes}")
-for i in range(7):
-    if (("E" != movPes[i][0] and "D" != movPes[i][0]) or 
-        (3 < int(movPes[i][1]) < 1) or (3 < int(movPes[i][2]) < 1)):
-        newAttempt = True
-        qErrors += 1
-        '''print(f"Letra errada: {movPes[i][0]} | Posição na entrada: {i}")
-        qErrors += 1
-        print(f"Index da matriz errado!: {movPes[i][1:3]} | Posição na entrada: {i} | Num erros: {qErrors}")'''
-if (newAttempt): print(f"Movimento inválido! Por favor, insira outro.")
+j = 0
+while(j < 7):
+    #print(f"{movPes[j][1]} | {movPes[j][2]}")
+    if (("E" != movPes[j][0] and "D" != movPes[j][0]) or 
+        (3 < int(movPes[j][1]) or int(movPes[j][1]) < 1) or (3 < int(movPes[j][2]) or int(movPes[j][2])< 1) or
+        (len(movPes) != 7)):
+        j = 0
+        print(f"Movimento inválido! Por favor, insira outro.")
+        movPes = input().split(", ")
+    else: j += 1
+    
 # ----------------------------------------
 
 # Treinamento do Jamal
 presetJamal = ["D12", "D33", "E12", "E31", "D12", "E31", "D12"]
+
+# Calculando erros de movimento
+qErrors = 0
+for k in range(7): 
+    if (movPes[k] != presetJamal[k]): qErrors+=1
+# ----------------------------
+
+
 movOutJamal = f"\nJamal - Movimentação 0:\n" + f". . .\n"+f". . .\n"+f"E . D\n"+f"\nJamal - Movimentação 1:\n"+f". 1 .\n"+f". . .\n"+f"E . .\n"+f"\nJamal - Movimentação 2:\n"+f". . .\n"+f". . .\n"+f"E . 2\n"+f"\nJamal - Movimentação 3:\n"+f". 3 .\n"+f". . .\n"+f". . D\n"+f"\nJamal - Movimentação 4:\n"+f". . .\n"+f". . .\n"+f"4 . D\n"+f"\nJamal - Movimentação 5:\n"+f". 5 .\n"+f". . .\n"+f"E . .\n"+f"\nJamal - Movimentação 6:\n"+f". D .\n"+f". . .\n"+f"6 . .\n"+f"\nJamal - Movimentação 7:\n"+f". 7 .\n"+f". . .\n"+f"E . .\n"
 # Saídas obrigatórias do Jamal
 print(f"Jamal - \"Vou ensinar apenas uma vez, então preste atenção.\"")
@@ -60,23 +62,29 @@ print(f"{movOutJamal}")
 movOutMonitor = [[".", ".", "."], [".", ".", "."], ["E", ".", "D"]]
 #print(f"{movOutMonitor}")
 
-print(f"{nmPior} - Movimentação 0:\n"
-    f". . .\n"
-    f". . .\n"
-    f"E . D\n")
+print(f"{nmPior} - Movimentação 0:\n"+f". . .\n"+f". . .\n"+f"E . D\n")
+xE, yE, xD, yD = 2, 0, 2, 2
 for i in range(7):
-    # Acessa os Movimentos do Monitor
-    x,y = int(movPes[i][1])-1, int(movPes[i][2])-1
-    # Substituindo o conteúdo da matriz pelo número do passo
-    movOutMonitor[x][y] = str(i+1)
-
-    print(f"{nmPior} - Movimentação {i+1}:\n")
-    for i in range(3):
-        print(" ".join(movOutMonitor[i]))
-
+    # Verificando qual pé está se movendo
+    if (movPes[i][0] == "E"): # Pé esquerdo se move
+        movOutMonitor[xD][yD] = "D"
+        movOutMonitor[xE][yE] = "." # Retira a letra da Matriz
+        # Carrega posição do Pé em movimento
+        xE,yE = int(movPes[i][1])-1, int(movPes[i][2])-1
+        # Substituindo o conteúdo da matriz pelo número do passo
+        movOutMonitor[xE][yE] = str(i+1)
+    else: 
+        movOutMonitor[xE][yE] = "E"
+        movOutMonitor[xD][yD] = "."
+        xD,yD = int(movPes[i][1])-1, int(movPes[i][2])-1
+        # Substituindo o conteúdo da matriz pelo número do passo
+        movOutMonitor[xD][yD] = str(i+1)
+    
+    print(f"{nmPior} - Movimentação {i+1}:")
+    for m in range(3):
+        print(" ".join(movOutMonitor[m]))
+    print()
 # --------------------------------
-
-
 
 # Verificação de sequência do passinho do Jamal
 learned = False 
@@ -93,12 +101,11 @@ else:
         # Saída obrigatória
         print(f"Foi quase! O monitor merece uma nova chance!")
         movPes = input().split(", ")
-        print(f"{movOutJamal}")
+        print()
         if (movPes == presetJamal): 
             learned = True
             print(f"Era isso! {nmPior} só estava precisando de um empurrãozinho.")
         else: print(f"Nem com outra tentativa {nmPior} conseguiu ajeitar isso.")
-
     elif (qErrors == 2):
         print(f"Melhor o monitor {nmPior} deixar esse negócio de dança pra lá.")
     elif (qErrors == 3):
