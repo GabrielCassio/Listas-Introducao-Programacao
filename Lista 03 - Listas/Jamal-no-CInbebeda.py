@@ -57,8 +57,22 @@ print(f"{movOutJamal}")
 # --------------------------
 
 # Saídas do monitor
-movOutMonitor = f"{nmPior} - Movimentação 0:\n" + f". . .\n"+f". . .\n"+f"E . D\n"+f"\n{nmPior} - Movimentação 1:\n"+f". 1 .\n"+f". . .\n"+f"E . .\n"+f"\n{nmPior} - Movimentação 2:\n"+f". . .\n"+f". . .\n"+f"E . 2\n"+f"\n{nmPior} - Movimentação 3:\n"+f". 3 .\n"+f". . .\n"+f". . D\n"+f"\n{nmPior} - Movimentação 4:\n"+f". . .\n"+f". . .\n"+f"4 . D\n"+f"\n{nmPior} - Movimentação 5:\n"+f". 5 .\n"+f". . .\n"+f"E . .\n"+f"\n{nmPior} - Movimentação 6:\n"+f". D .\n"+f". . .\n"+f"6 . .\n"+f"\n{nmPior} - Movimentação 7:\n"+f". 7 .\n"+f". . .\n"+f"E . .\n"
-print(f"{movOutMonitor}")
+movOutMonitor = [[".", ".", "."], [".", ".", "."], ["E", ".", "D"]]
+#print(f"{movOutMonitor}")
+
+print(f"{nmPior} - Movimentação 0:\n"
+    f". . .\n"
+    f". . .\n"
+    f"E . D\n")
+for i in range(7):
+    # Acessa os Movimentos do Monitor
+    x,y = int(movPes[i][1])-1, int(movPes[i][2])-1
+    # Substituindo o conteúdo da matriz pelo número do passo
+    movOutMonitor[x][y] = str(i+1)
+
+    print(f"{nmPior} - Movimentação {i+1}:\n")
+    for i in range(3):
+        print(" ".join(movOutMonitor[i]))
 
 # --------------------------------
 
