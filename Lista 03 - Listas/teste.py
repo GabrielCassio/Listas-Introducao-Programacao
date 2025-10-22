@@ -1,8 +1,5 @@
-n = input()
+arr = ["Cássio", "Jamal" , "Neiff", "Mago"]
+notas = ["Mago", "Jamal" , "Neiff", "Cássio"]
 
-b = []
-for i in range(n):
-    a = input()
-    b.append(a)
+print(arr == notas)
 
-print(b)
