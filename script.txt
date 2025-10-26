@@ -1,4 +1,0 @@
-Henrique, 3, Júnior, 8, Guilherme, 10, Guilherme, 5
-Henrique, 3, Júnior, 8, Miguel, 10, Guilherme, 5
-D12, D33, E12, E31, D12, E31, D14
-D12, D33, E12, E31, D12, E31, D12

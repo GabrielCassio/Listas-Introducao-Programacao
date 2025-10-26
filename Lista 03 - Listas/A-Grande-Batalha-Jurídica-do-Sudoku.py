@@ -1,4 +1,4 @@
-entrada = '''
+'''
 5 3 . . 7 . . . .
 6 . . 1 9 5 . . .
 . 9 8 . . . . 6 .
@@ -9,6 +9,7 @@ entrada = '''
 . . . 4 1 9 . . 5
 . . . . 8 . . 7 9
 '''
+# Uso da ideia das pilhas, base da recursão
 
 possibleValues = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
 
@@ -17,112 +18,63 @@ tab = []
 for i in range(9):
     tabLiine = input().split()
     tab.append(tabLiine)
-# ----------------------------------------------------------------------------
+# ----------------------------------------------------
 
-# Busca
-# Opções válidas
-opValidInRow = [] # Para Linha
-opValidInColumn = [] # Para Coluna
-opValidInGrid3x3 = [] # Para subGrid
-# Intersecção das opções
-candidates = []
-#Matrix de saída
+# Armazenando casas em branco | Casas Problema
+emptyBoxes, posEmptyBoxes = [], 0
+for row in range(9):
+    for col in range(9):
+        if (tab[row][col] == '.'): 
+            emptyBoxes.append([row, col])
+#print(f"{emptyBoxes}")
+# ----------------------------------------------------
+
 finalMatrix = ""
-
-# Mexendo com MapStack
-mapStack = [
-    [[],[],[], [],[],[], [],[],[]],
-    [[],[],[], [],[],[], [],[],[]],
-    [[],[],[], [],[],[], [],[],[]],
-    [[],[],[], [],[],[], [],[],[]],
-    [[],[],[], [],[],[], [],[],[]],
-    [[],[],[], [],[],[], [],[],[]],
-    [[],[],[], [],[],[], [],[],[]],
-    [[],[],[], [],[],[], [],[],[]],
-    [[],[],[], [],[],[], [],[],[]],
-]
-choiceStack = []
-
-'''finishedRows = 0
-if (not '.' in tab[row]):  finishedRows += 1'''
 stopGame = False
 while (not stopGame):
-#for i in range(1):
-    for row in range(9):
-        if (not stopGame):
-            for col in range(9):
-                # Achando candidatos para CADA posição da matriz
-                if (tab[row][col] == "."): # Pego cada posição bem definida na linha [row]
-                    validValuesRow = possibleValues[:]   
-                    # Opções válidas na Linha
-                    for valInCol in tab[row]: # Percorre a linha coluna a coluna
-                        if ((valInCol != '.' ) and (valInCol in validValuesRow)): validValuesRow.remove(valInCol)
-                    opValidInRow = validValuesRow # Valores válidos para a posição tab[row][col] da rowatriz
+    # Não verificar todos de uma vez
+    solvingBox = emptyBoxes[posEmptyBoxes] # Posição do caixa vazia '.'
+    curRow, curCol = solvingBox[0], solvingBox[1]
+    finded = False # Estado em que se encontra um candidato válido
 
-                    # Opções válidas na Coluna
-                    validValuesColumn = possibleValues[:]
-                    for posRow in range(9): # Temos que percorrer a lista linha por linha e não elemento da coluna
-                        valInRow = tab[posRow][col]
-                        if ((valInRow != '.') and (valInRow in validValuesColumn)): validValuesColumn.remove(valInRow)
-                    opValidInColumn = validValuesColumn
+    # Validação dos possíveis valores e teste
+    # Precisamos fazer uma comparação dinâmica
+    # para os próximos elementos da pilha
+    curValueInBox = 0
+    if tab[curRow][curCol] == '.': curValueInBox = 1
+    else: curValueInBox = int(tab[curRow][curCol]) + 1
 
-                    # Opções válidas no subGrid 3x3
-                    # Em qual grid
-                    subGrid = [] # [nLinhas, nColunas]
-                    if ((row//3 < 1) and (col//3 < 1)): subGrid = [range(0,3), range(0, 3)]
-                    elif ((row//3 < 1) and (col//3 < 2)): subGrid = [range(0, 3), range(3, 6)]
-                    elif ((row//3 < 1) and (col//3 < 3)): subGrid = [range(0, 3), range(6, 9)]
-                    elif ((row//3 < 2) and (col//3 < 1)): subGrid = [range(3, 6), range(0, 3)]
-                    elif ((row//3 < 2) and (col//3 < 2)): subGrid = [range(3, 6), range(3, 6)]
-                    elif ((row//3 < 2) and (col//3 < 3)): subGrid = [range(3, 6), range(6, 9)]
-                    elif ((row//3 < 3) and (col//3 < 1)): subGrid = [range(6, 9), range(0, 3)]
-                    elif ((row//3 < 3) and (col//3 < 2)): subGrid = [range(6, 9), range(3, 6)]
-                    elif ((row//3 < 3) and (col//3 < 3)): subGrid = [range(6, 9), range(6, 9)]
+    for curValue in range(curValueInBox, 10):
+        isValid = True # Condição de validação do valor
+        if (not finded):
+            curValue = str(curValue)
+            for cols in range(9): # Compara com os demais Elementos da Linha
+                if ((tab[curRow][cols] == curValue) and (cols != curCol)):
+                    isValid = False
+            for rows in range(9): # Compara com os demais
+                if ((tab[rows][curCol] == curValue) and (rows != curRow)):
+                    isValid = False
 
+            startSubGridRow = curRow - curRow%3
+            startSubGridCol = curCol - curCol%3
+            for subRow in range(startSubGridRow, startSubGridRow + 3):
+                for subCol in range(startSubGridCol, startSubGridCol + 3):
+                    if ((tab[subRow][subCol] == curValue) and ((subRow != curRow) or (subCol != curCol))):
+                        isValid = False
 
-                    validValues3x3 = possibleValues[:] 
-                    for gridRow in subGrid[0]:
-                        for gridCol in subGrid[1]:
-                            valInGrid = tab[gridRow][gridCol]
-                            if ((valInGrid != '.')): validValues3x3.remove(valInGrid)       
-                    opValidInGrid3x3 = validValues3x3             
-                
-                    # Posso pegar qualquer lista para iterar e pegar a intersecção dos conjuntos
-                    validating = []
-                    for num in opValidInRow:
-                        if ((num in opValidInColumn) and (num in opValidInGrid3x3)):
-                            validating.append(num)
-                    candidates = validating[:]
-                    # --------------------------------------------------
+            if (isValid): 
+                tab[curRow][curCol] = curValue
+                posEmptyBoxes += 1 # Avança na lista/pilha
+                finded = True
 
-                    # Validação de Escolha
-                    # Armazenando casos válidos
-                    if (len(candidates) > 0): 
-                        mapStack[row][col] = candidates          
-                        tab[row][col] = mapStack[row][col].pop(0)
-                    elif (len(candidates) == 0):
-                        print(f"Chegamos ao ponto de que a posição ({row},{col}) não possui casos possíveis para exchange")
-                        stopGame = True
-                
-    # Vendo as possibilidades mapeadas
-    print(f"----- mapStack -----")
-    for i in range(9):
-        print(f"{mapStack[i]}")
-    print()
-
-    # Verificando conclusão do Sudoku
-    primeMatrix = ""
-    for length in range(9):
-        primeMatrix += " ".join(tab[length])+"\n"
-    print(f"{primeMatrix}") # Retirar depois
-    if (not '.' in primeMatrix): 
-        stopGame, finalMatrix  = True, primeMatrix
-    # -------------------------------
+    # O valor é válido?
+    if (finded):
+        if posEmptyBoxes == len(emptyBoxes): stopGame = True
+    else:
+        tab[curRow][curCol] = '.'
+        posEmptyBoxes -= 1  
 
 print(f"Caso encerrado! Mizael provou sua inocência lógica e o Sudoku foi resolvido!")
+for i in range(9):
+    finalMatrix += " ".join(tab[i])+"\n"
 print(f"{finalMatrix}", end="")
-
-
-# Validação dos candidatos - Caso Determinístico
-# if (len(candidates) == 1): tab[row][col] = candidates[0]
-# ------------------------------------
