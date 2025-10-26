@@ -1,0 +1,79 @@
+5 3 . . 7 . . . .
+6 . . 1 9 5 . . .
+. 9 8 . . . . 6 .
+8 . . . 6 . . . 3
+4 . . 8 . 3 . . 1
+7 . . . 2 . . . 6
+. 6 . . . . 2 8 .
+. . . 4 1 9 . . 5
+. . . . 8 . . 7 9
+Chegamos ao ponto de que a posição (0,8) não possui casos possíveis para exchange
+Chegamos ao ponto de que a posição (1,7) não possui casos possíveis para exchange
+Chegamos ao ponto de que a posição (2,0) não possui casos possíveis para exchange
+Chegamos ao ponto de que a posição (2,4) não possui casos possíveis para exchange
+Chegamos ao ponto de que a posição (2,5) não possui casos possíveis para exchange
+Chegamos ao ponto de que a posição (3,7) não possui casos possíveis para exchange
+Chegamos ao ponto de que a posição (4,4) não possui casos possíveis para exchange
+Chegamos ao ponto de que a posição (5,1) não possui casos possíveis para exchange
+Chegamos ao ponto de que a posição (5,7) não possui casos possíveis para exchange
+Chegamos ao ponto de que a posição (6,5) não possui casos possíveis para exchange
+Chegamos ao ponto de que a posição (7,2) não possui casos possíveis para exchange
+Chegamos ao ponto de que a posição (8,2) não possui casos possíveis para exchange
+Chegamos ao ponto de que a posição (8,6) não possui casos possíveis para exchange
+----- mapStack -----
+[[], [], ['2', '4'], ['6'], [], ['6', '8'], ['9'], [], []]
+[[], ['4', '7'], ['7'], [], [], [], ['7'], [], []]
+[[], [], [], [], [], [], ['4', '5'], [], ['4']]
+[[], ['5'], ['5', '9'], ['7', '9'], [], [], ['9'], [], []]
+[[], [], ['9'], [], [], [], ['9'], [], []]
+[[], [], ['9'], [], [], [], [], [], []]
+[['3', '9'], [], ['7', '9'], [], [], [], [], [], []]
+[['3'], ['8'], [], [], [], [], [], [], []]
+[[], [], [], [], [], [], [], [], []]
+
+5 3 1 2 7 4 8 9 .
+6 2 4 1 9 5 3 . 7
+. 9 8 3 . . 1 6 2
+8 1 2 5 6 7 4 . 3
+4 5 6 8 . 3 7 2 1
+7 . 3 9 2 1 5 . 6
+1 6 5 7 3 . 2 8 4
+2 7 . 4 1 9 6 3 5
+3 4 . 6 8 2 . 7 9
+
+Caso encerrado! Mizael provou sua inocência lógica e o Sudoku foi resolvido!
+
+
+# -----------------------------------------------------------
+
+PS C:\Users\Luciana\Desktop\Listas-Introducao-Programacao> & C:\msys64\ucrt64\bin\python.exe "c:/Users/Luciana/Desktop/Listas-Introducao-Programacao/Lista 03 - Listas/A-Grande-Batalha-Jurídica-do-Sudoku.py"
+5 3 . . 7 . . . .
+6 . . 1 9 5 . . .
+. 9 8 . . . . 6 .
+8 . . . 6 . . . 3
+4 . . 8 . 3 . . 1
+7 . . . 2 . . . 6
+. 6 . . . . 2 8 .
+. . . 4 1 9 . . 5
+. . . . 8 . . 7 9
+Chegamos ao ponto de que a posição (0,8) não possui casos possíveis para exchange
+----- mapStack -----
+[[], [], ['2', '4'], ['6'], [], ['6', '8'], ['9'], [], []]
+[[], [], [], [], [], [], [], [], []]
+[[], [], [], [], [], [], [], [], []]
+[[], [], [], [], [], [], [], [], []]
+[[], [], [], [], [], [], [], [], []]
+[[], [], [], [], [], [], [], [], []]
+[[], [], [], [], [], [], [], [], []]
+[[], [], [], [], [], [], [], [], []]
+[[], [], [], [], [], [], [], [], []]
+
+5 3 1 2 7 4 8 9 .
+6 . . 1 9 5 . . .
+. 9 8 . . . . 6 .
+8 . . . 6 . . . 3
+4 . . 8 . 3 . . 1
+7 . . . 2 . . . 6
+. 6 . . . . 2 8 .
+. . . 4 1 9 . . 5
+. . . . 8 . . 7 9
