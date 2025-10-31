@@ -67,7 +67,7 @@ def ExecuteAttack(elissonPok: list, oponentPok: list, maxLifeEliPok: int, maxLif
         print(f"Causou {damage} de dano. HP de {oponentPok[0]} agora é {oponentPok[2]}/{maxLifeOpPok}.")
 
         if (oponentPok[2] > 0):
-            print(f"\n{oponentPok[0]} do oponente usa {oponentPok[4]}!")
+            print(f"\n{oponentPok[0]} do oponente usa {oponentPok[4]}!") # Output de ataque
             mult1 = IsTypeEffective(oponentPok[6], elissonPok[1])
             damage = PokemonDamage(oponentPok[5], elissonPok[3], mult1)
             elissonPok[2] -= damage
@@ -78,7 +78,7 @@ def ExecuteAttack(elissonPok: list, oponentPok: list, maxLifeEliPok: int, maxLif
 
             print(f"Causou {damage} de dano. HP de {elissonPok[0]} agora é {elissonPok[2]}/{maxLifeEliPok}.")
     else:
-        print(f"\n{oponentPok[0]} do oponente usa {oponentPok[4]}!")
+        print(f"\n{oponentPok[0]} do oponente usa {oponentPok[4]}!") # Output de ataque
         mult1 = IsTypeEffective(oponentPok[6], elissonPok[1])
         damage = PokemonDamage(oponentPok[5], elissonPok[3], mult1)
         elissonPok[2] -= damage
