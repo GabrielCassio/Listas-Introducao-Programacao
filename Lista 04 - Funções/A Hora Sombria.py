@@ -78,53 +78,136 @@ curLevel = 0
 # Funções Obrigatórias
 def combat():
     # Quantidade de movimentos que os amigos de Makoto podem ajudar
-    movsSupFriends = [2, 1] # [yakari, jumpei]
+    movsSupFriends = [1, 1] # [yakari, junpei]
 
+    indexShadow, isTime = 0, "Makoto"
+    stopCombat = False
+    while (not stopCombat):
+        if (isTime == "Makoto"):
+            if (statusShadows[indexShadow] == "Ativo"):
+                turnMakoto(indexShadow, statusShadows, shadowsInBattleList[indexShadow], propsMakoto, propsPersona, movsSupFriends)
+                isTime = "Shadow"
+        elif (isTime == "Shadow"):
+            if (statusShadows[indexShadow] != "Derrotado"):
+                turnShadow(indexShadow, shadowsInBattleList[indexShadow], statusShadows, propsMakoto)
+                isTime = "Makoto"
+        
+        # Verifica MAIS UM
+        oneMore = propsMakoto[3]
+        if (oneMore): isTime = "Makoto"
+        
+        # Região de indexamento de sombra
+        if (indexShadow == len())
 
-def turnShadow(statusShadow: str):
-    if (statusShadow == "Derrubado"):
-        statusShadow = "Ativo"
-    ...
+# Resultado dos Golpes de Persona
+def resultAttack(list1: list) -> str:
+    ascendSortExch, reverseSortExch = bubbleSort(list1) # Número de trocas
 
-def turnMakoto(movsFriends: list):
+    if (ascendSortExch == 0 or reverseSortExch == 0): 
+        # Deixa a sombra vulnerável
+        return "Acerto em Fraqueza"
+    else:
+        finalValueExch = min(ascendSortExch, reverseSortExch)
+        if (finalValueExch <= 5): return "Acerto Normal"
+        else: return "Erro"
+
+def bubbleSort(list1: list):
+    # Recebe uma lista e verifica se ela está ordenada com base nas exchanges
+    # Retorna as exchanges
+    ctrSortedExch, ctrRevSortedExch   = 0, 0
+    sortedList, reverseSortedList = list1, list1[:]
+
+    listLength = len(list1)
+    for i in range(listLength):
+        for j in range(i+1, listLength):
+
+            # Verifica o ordenamento direto
+            if (sortedList[i] > sortedList[j]): 
+                ctrSortedExch += 1
+                sortedList[i], sortedList[j] = sortedList[j], sortedList[i]
+                # Verifica o ordenamento reverso
+            if (reverseSortedList[i] < reverseSortedList[j]):
+                ctrRevSortedExch += 1
+                reverseSortedList[i], reverseSortedList[j] = reverseSortedList[j], reverseSortedList[i]
+
+    return ctrSortedExch, ctrRevSortedExch
+
+# As funções de turno fazem modificações diretas com base em referência
+def turnShadow(indexShadow: int, propsShadow: list, statusShadow: list, propsMakoto: list):
+    # [nome - vida - ataque - golpe] - propsShadow
+    if (statusShadow[indexShadow] == "Derrubado"): statusShadow[indexShadow] = "Ativo"
+    elif (statusShadow[indexShadow] == "Ativo"):
+        nameAtk, damageAtk = propsShadow[3], propsShadow[2]
+        danoShadow = calcDamage(damageAtk, nameAtk)
+        propsMakoto[0] -= danoShadow # Decrementa a vida de Makoto
+
+def turnMakoto(indexShadow: int, statusShadow: list, propsShadow: list, propsMakoto: list, propsPersona: list, movsFriends: list):
+    # [nome - vida - ataque - golpe] - propsShadow
     # Recebe a quantidade atual de mana do Makoto, as informações da persona do makoto, lista de moviemntos dos amigos de Makoto
+    # Alterações na vida das Sombras é feita pela referência, assim como os movimentos de junpei e yukari
 
     # Lista de entradas possíveis 
-    actionListMakoto = ["jumpei", "yuraki", "persona", "atacar"]
+    actionListMakoto = ["junpei", "yuraki", "persona", "atacar"]
     # Entrada de ação do turno de Makoto
     actionMakoto = input()
     # A ação de entrada tem que estar na lista de ações
-    while(not (actionMakoto in actionListMakoto) or (actionMakoto == "jumpei" and movsFriends[1]) or (actionMakoto == "yukari" and movsFriends[0]) or (actionMakoto == "persona" and propsMakoto[1] <= personaMakoto[3])):
+    while(not (actionMakoto in actionListMakoto) or (actionMakoto == "junpei" and movsFriends[1]) or (actionMakoto == "yukari" and movsFriends[0]) or (actionMakoto == "persona" and propsMakoto[1] <= propsPersona[3])):
         actionListMakoto = input()
     
-    if (actionMakoto == "jumpei"):
-        # Jumpei causa 100 de dano
+    if (actionMakoto == "persona"): # Caso seja Makoto e tenha mana
+        # Decrementa a mana do Makoto
+        custoPersona = propsPersona[3]
+        propsMakoto[1] -= custoPersona
+        # Ataque da Persona
+        elementsList = [int(x) for x in input().split()]
+        resAtk = resultAttack(elementsList)
+        # Condicional de ataque do BubbleSort
+        # Resultados possíveis: Acerto normal, Erro, Acerto em Fraqueza
+        if (resAtk == "Acerto em Fraqueza"):
+            atkPersona, nameAtk = propsPersona[1], propsPersona[2]
+            danoPersona = calcDamage(atkPersona, nameAtk, resAtk)
+            propsShadow[1] -= danoPersona
+            statusShadow[indexShadow] = "Derrubado" # Derruba a sombra
+            propsMakoto[3] = True   # Concede uma ação extra
+        elif (resAtk == "Acerto Normal"):
+            atkPersona, nameAtk = propsPersona[1], propsPersona[2]
+            danoPersona = calcDamage(atkPersona, nameAtk)
+            propsShadow[1] -= danoPersona
 
-        # Decrementa o uso da ajuda de jumpei
+    elif (actionMakoto == "atacar"): # Poder base sempre igual a 2
+        # A questão é cagada em explicar o dano causado pelo Makoto. Assumimos equivalente ao ataque da persona
+        atkPersona = propsPersona[1]
+        danoMakoto = calcDamage(atkPersona)
+        # Decrementando a vida da Sombra
+        propsShadow[1] -= danoMakoto
+    elif (actionMakoto == "junpei"):
+        # junpei causa 100 de dano
+        propsShadow[1] -= 100
+        # Decrementa o uso da ajuda de junpei
         movsFriends[1] -= 1
     elif (actionMakoto == "yukari"):
         # yukari restaura 100 pontos de vida do Makoto
         vidaMakoto = propsMakoto[0]
         propsMakoto[0] += min(300, vidaMakoto + 100)
         # Decrementa o uso da ajuda de yukari
-        movsFriends[0] -= 1
-    elif (actionMakoto == "persona"):
-        elementsList = input().split()
-    elif (actionMakoto == "atacar"):
-        ...
+        movsFriends[0] -= 1   
 
+def calcDamage(attackDamage: int, nameAttack: str = "", resultAttack: str = "") -> int:
+    if (resultAttack == "Acerto em Fraqueza"):
+        return int((((calcBasePower(nameAttack) * 15)**0.5) * (attackDamage/2)) * 1.5)
+    else: return int(((calcBasePower(nameAttack) * 15)**0.5) * (attackDamage/2))
     
-
-def calcDamage():
-    ...
-
-def bubbleSort(list: list) -> list:
-    # Recebe uma lista não ordenada e devolve uma lista ordenada
-    listLength = len(list)
-    for i in range(listLength):
-        for j in range(i+1, listLength):
-            if (list[i] > list[j]): list[i], list[j] = list[j], list[i]
-    return list
+def calcBasePower(nameAttack: str) -> int:
+    powerAttack, listAttacks = 0, [["Zio", "Garu", "Agi", "Bufu"], ["Corte", "Perfuração", "Pancada"], ["Zionga", "Garula", "Agilao", "Bufula"]]
+    for i in range(3):
+        # Golpe do tipo Mágico Leve
+        if (nameAttack in listAttacks[i][0]): powerAttack = 3
+        # Golpe do tipo Físico Leve
+        elif (nameAttack in listAttacks[i][1]): powerAttack = 4
+        # Golpe do tipo Mágico Médio
+        elif (nameAttack in listAttacks[i][2]): powerAttack = 5
+        elif (nameAttack == ""): powerAttack = 2
+    return powerAttack
 
 def main():
     # Condição de subida para o próximo andar
@@ -132,7 +215,7 @@ def main():
     while (not stopUpTower):
         # A cada novo ANDAR/BATALHA, temos:
         # Entrada do Persona de Makoto
-        personaMakoto = [int(x) if x.isnumeric() else x for x in input().split(" - ")] 
+        propsPersona = [int(x) if x.isnumeric() else x for x in input().split(" - ")] 
 
         # Número de sombras no combate
         numShadows = int(input())
@@ -147,8 +230,8 @@ def main():
 # Main code ---------------
 # Makoto
 # [nome - atk - golpe - custo]
-personaMakoto   = [] 
-propsMakoto     = [300, 70] # [vida, mana]
+propsPersona    = [] 
+propsMakoto     = [300, 70, False] # [vida, mana, MAIS UM]
 
 # Shadows
 # [nome - vida - ataque - golpe]
